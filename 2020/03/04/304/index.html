@@ -1,416 +1,102 @@
+extends includes/layout.pug
+
+block top_img
+  - var top_img =  page.top_img || page.cover || theme.post_meta.top_img || theme.default_top_img
+  - var bg_img = top_img !== true ? `background-image: url(${top_img})` : ''
+  div#top-container(style=bg_img)
+    #post-info
+      #post-title
+          .posttitle= page.title || _p('no_title')
+      #post-meta
+        if (theme.post_meta.date_type)
+          if (theme.post_meta.date_type === 'both')
+            time.post-meta__date
+              i.fa.fa-calendar.fa-fw(aria-hidden="true")
+              =' '+_p('post.created')+' '+date(page.date, config.date_format)
+              span.post-meta__separator |
+              i.fa.fa-history.fa-fw(aria-hidden="true")
+              =' '+_p('post.updated')+' '+date(page.updated, config.date_format)
+          else
+            - var date_type = theme.post_meta.date_type === 'updated' ? 'updated' : 'date'
+            time.post-meta__date #[i.fa.fa-calendar.fa-fw(aria-hidden="true")] #[=date(page[date_type], config.date_format)]
+                  
+        if (theme.post_meta.categories && page.categories.data.length > 0)
+          if (theme.post_meta.date_type)
+            span.post-meta__separator |
+          span
+            each item, index in page.categories.data
+              i.fa.fa-inbox.post-meta__icon.fa-fw(aria-hidden="true")
+              a(href=url_for(item.path)).post-meta__categories #[=item.name]
+              if (index < page.categories.data.length - 1)
+                i.fa.fa-angle-right.fa-fw(aria-hidden="true")
+        .post-meta-wordcount
+          if (theme.wordcount && theme.wordcount.enable)
+            i.fa.fa-file-word-o.post-meta__icon.fa-fw(aria-hidden="true")
+            span= _p('post.wordcount') + ':'
+            span.word-count= wordcount(page.content)
+            span.post-meta__separator |
+            i.fa.fa-clock-o.post-meta__icon.fa-fw(aria-hidden="true")
+            span= _p('post.min2read', min2read(page.content, {cn: 350, en: 160}))
+          .post-meta-pv-cv
+            if (theme.wordcount && theme.wordcount.enable && theme.busuanzi.page_pv)
+              span.post-meta__separator |
+            if theme.busuanzi.page_pv       
+              span
+                i.fa.fa-eye.post-meta__icon.fa-fw(aria-hidden="true") 
+                =_p('post.page_pv') + ':'
+              span#busuanzi_value_page_pv
+            if (theme.disqus && theme.disqus.enable && theme.disqus.count && page.comments !== false)
+              if (theme.busuanzi && theme.busuanzi.page_pv)
+                span.post-meta__separator |
+              i.fa.fa-comment-o.post-meta__icon.fa-fw(aria-hidden="true")
+              span= _p('post.comments') + ':'
+              a(href=url_for(page.path) + '#post-comment')
+                span.disqus-comment-count(data-disqus-url=page.permalink)
+            if (theme.valine && theme.valine.enable && theme.valine.count && page.comments !== false)
+              if (theme.busuanzi && theme.busuanzi.page_pv)
+                span.post-meta__separator |
+              i.fa.fa-comments-o.post-meta__icon.fa-fw(aria-hidden="true")
+              span= _p('post.comments') + ':'
+              a(href=url_for(page.path) + '#post-comment' itemprop="discussionUrl")
+                span.valine-comment-count.comment-count(data-xid=url_for(page.path) itemprop="commentCount")
+            if (theme.gitalk && theme.gitalk.enable && theme.gitalk.count && page.comments !== false)
+              if (theme.busuanzi && theme.busuanzi.page_pv)
+                span.post-meta__separator |
+              i.fa.fa-comments-o.post-meta__icon.fa-fw(aria-hidden="true")
+              span= _p('post.comments') + ':'
+              a(href=url_for(page.path) + '#post-comment')
+                span.gitalk-comment-count.comment-count
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="renderer" content="webkit">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>软件界面认识小苹果大橘子</title>
-  <link rel="shortcut icon" href="https://tfs.alipayobjects.com/images/partner/TB1w2u_bH8CDuNkUuZmXXaU0XXa">
+block content
+  article#post(class="")
+    #post-content.article-container!= page.content
+  if (theme.post_copyright && theme.post_copyright.enable && page.copyright != false)
+    .post-copyright
+      .post-copyright__author
+        span.post-copyright-meta= _p('post.copyright.author') + ": "
+        span.post-copyright-info
+          a(href=`mailto:${config.email}`) #[=config.author]
+      .post-copyright__type
+        span.post-copyright-meta= _p('post.copyright.link') + ": "
+        span.post-copyright-info
+          a(href=url_for(page.permalink)) #[=page.permalink]
+      .post-copyright__notice
+        span.post-copyright-meta= _p('post.copyright.copyright_notice') + ": "
+        span.post-copyright-info!= _p('post.copyright.copyright_content', theme.post_copyright.license_url, theme.post_copyright.license, config.url, config.title)
   
-    
-    
-      <link rel="stylesheet" href="/css/bootstrap.min.css">
-    
-      <link rel="stylesheet" href="/css/font-awesome.min.css">
-    
-      <link rel="stylesheet" href="/css/atom-one-dark.css">
-    
-      <link rel="stylesheet" href="/css/jquery.fancybox.css">
-    
-      <link rel="stylesheet" href="/css/nprogress.min.css">
-    
-      <link rel="stylesheet" href="/css/valine.css">
-    
-      <link rel="stylesheet" href="/css/life.css">
-    
-  
-
-  
-
-  <!-- jQuery first, then Tether, then Bootstrap JS. -->
-  
-  
-  
-    <script src="/js/jquery-2.2.4.min.js"></script>
-  
-    <script src="https://cdn1.lncld.net/static/js/3.1.0/av-min.js"></script>
-  
-    <script src="/js/jquery.pjax.js"></script>
-  
-    <script src="/js/nprogress.min.js"></script>
-  
-    <script src="/js/tether.min.js"></script>
-  
-    <script src="/js/bootstrap.min.js"></script>
-  
-    <script src="/js/highlight.min.js"></script>
-  
-    <script src="/js/highlightjs-line-numbers.min.js"></script>
-  
-    <script src="/js/jquery.fancybox.js"></script>
-  
-    <script src="/js/jquery.qrcode.min.js"></script>
-  
-    <script src="/js/Valine.min.js"></script>
-  
-  
-<meta name="generator" content="Hexo 4.2.0"></head>
-<body>
-<script>AV.init({appId:'',appKey:''});</script>
-<script type="text/javascript">
-      var config = {
-            ClasS: 'Counter',
-            el:'.views',
-            elP: '.views-post'
-      }
-</script>
-<div class="container">
-    <div class="row blog-box-shadow">
-        <!--博客主栏开始-->
-        <div class="col-xl-9 col-lg-12 blog-main" id="pjax-box">
-            <header class="blog-header">
-                <a href="http://yoursite.com" class="blog-header-mobile-title">小苹果大橘子</a>
-                <a href="javascript:;" class="blog-header-navbar-btn"><i class="fa fa-bars"></i></a>
-                <nav class="blog-header-navbar blog-header-fixed">
-                    <ul class="blog-navbar-links">
-                        
-                          <li class="blog-nav-item"><a href="/" class="transition">首页</a></li>
-                        
-                          <li class="blog-nav-item"><a href="/about/" class="transition">关于</a></li>
-                        
-                          <li class="blog-nav-item"><a href="/links/" class="transition">链接</a></li>
-                        
-                        <div class="blog-navbar-right">
-                            <form action="">
-                                <div class="input-group">
-                                    <input type="text" class="blog-header-search" placeholder="search...">
-                                    <buttn type="submit" class="blog-header-search-btn"><i class="fa fa-search"></i></buttn>
-                                </div>
-                            </form>
-                        </div>
-                    </ul>
-                </nav>
-            </header>
-                
-<header class="blog-post-page-title">
-    <h4>软件界面认识</h4>
-    <time datetime="2020-03-04T08:55:28.000Z"><i class="fa fa-clock-o"></i>2020-03-04</time>
-    
-    
-    
-    
-	
-        <span><i class="fa fa-folder-o"></i>
-    		
-    	       <a href="/categories/PS/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">PS</a>
-    		
-        </span>
-	
-    
-</header>
-<div class="blog-main-post blog-post-page-box">
-    <article class="blog-post-block blog-post-page-content">
-        <section>
-            
-                <meta name="referrer" content="no-referrer">
-首先你需要自行下好PS然后才会有接下来的故事**（我的是 Adobe Photoshop cc 2018）
-
-
-
-<p>当你下好ps之后，你看到的可能会是我这样的页面</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304095541849-566236277.png" alt></p>
-<p>这密密麻麻的按钮，都是做什么的呢？</p>
-<ol>
-<li><h2 id="功能区"><a href="#功能区" class="headerlink" title="功能区"></a>功能区</h2></li>
-</ol>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141000553-357795051.png" alt></p>
-<p>这一条是ps的工具栏，工具栏中包括<strong>文件 编辑 图像 图层 文字 … …</strong>等等</p>
-<p>同时，鼠标在工具栏的每一个选项点击，都会有相应的下拉菜单（每一个都点点熟悉一下）</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304140822613-370010433.png" alt></p>
-<ol start="2">
-<li><h2 id="工具栏"><a href="#工具栏" class="headerlink" title="工具栏"></a>工具栏</h2></li>
-</ol>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304140843261-54696656.png" alt></p>
-<p>框选的部分就是工具栏，从上到下分别是：<strong>移动工具 矩形选框工具 套索工具 … …</strong>等等</p>
-<p>将鼠标放在图标上，就会弹出对应工具的名称</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304140907455-1958096173.png" alt></p>
-<p>在图标上右键，可以获得该工具的许多分类</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304140932829-820372880.png" alt></p>
-<ol start="3">
-<li><h2 id="属性栏"><a href="#属性栏" class="headerlink" title="属性栏"></a>属性栏</h2></li>
-</ol>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141201775-774667461.png" alt></p>
-<p>这是属性栏，是某个功能的属性，如图这就是快速选择工具的属性</p>
-<ol start="4">
-<li><h2 id="作图区"><a href="#作图区" class="headerlink" title="作图区"></a>作图区</h2></li>
-</ol>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141219564-703739693.png" alt></p>
-<p>这就是作图区，你的图片处理，都在这个地方处理</p>
-<ol start="5">
-<li><h2 id="其他区"><a href="#其他区" class="headerlink" title="其他区"></a>其他区</h2></li>
-</ol>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141237882-306599740.png" alt></p>
-<p>这里我称之为其他区，这个地方放置的是常用的属性，包括什么色板啊，历史记录啊之类的</p>
-<p>这里可以说道说道，功能是可以调整的，比如我用不上这个色板工具想删掉怎么办呢?在色板上右键，然后在下拉的选项卡中选择关闭就行了</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141303749-1215698926.gif" alt></p>
-<p>那现在又想用色板怎么办呢？在功能区选择窗口就能看到你刚才关闭的色板~选中，色板就回来了</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141322147-128751981.gif" alt></p>
-<p>同时，相应的工具还可以放置在不同位置，你甚至可以将色板工具放在ps软件外面</p>
-<p>只需要在“色板”这两个字上按住鼠标左键，就可以把窗口放在相应的位置</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141341049-275731016.gif" alt></p>
-<p>当我配置好界面之后，我的朋友过来使用我的电脑有时候不会觉得我的功能放置位置很舒服，他可能会给我弄成这样：</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141410316-66493350.png" alt></p>
-<p>等到我在想用怎么办？重新调整？那太麻烦了~这里教一个小技巧：首先先将面板调整成你舒服的样子，然后点击窗口-工作区-新建工作区，将你的布局保存好</p>
-<p><img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141434766-452083380.gif" alt></p>
-<p>这样当你的朋友弄坏你的布局之后，你可以这样：选择窗口-工作区-点击你存储好的工作区，就恢复你的选区了<img src="https://img2020.cnblogs.com/blog/1433227/202003/1433227-20200304141453515-1688867971.gif" alt></p>
-<hr>
-<p>其实这是第一节，主要是为了让你能够简单的认识一下ps界面，自己尽可能的点一点，看一看，知道哪个功能的下拉菜单都大概有什么功能，什么功能大概都在哪，简单的点点熟悉熟悉，从今往后，就会对每一个功能点进行详细的解读。</p>
-
-            
-        </section>
-        <footer class="blog-post-page-tags">
+  .tag_share
+    if (theme.post_meta.tags)
+      .post-meta__tag-list
+        each item, index in page.tags.data
+          a(href=url_for(item.path)).post-meta__tags #[=item.name]    
+    include includes/share/index.pug
         
-			
-				
-			<a href="/tags/PS/" rel="tag" data-toggle="tooltip" data-placement="top" title="Linux">PS</a>
-				
-			<a href="/tags/PS%E5%9F%BA%E7%A1%80/" rel="tag" data-toggle="tooltip" data-placement="top" title="Linux">PS基础</a>
-				
-			
-		
-        </footer>
-    </article>
-    <article class="blog-post-page-readmore">
-    	
-    	
-		
-			<a href="/2020/03/05/305/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="文件的打开新建及储存">上一篇</a>
-		
-
-		
-		
-
-        <div style="clear: both;"></div>
-    </article>
-
-    <article class="blog-post-block blog-post-page-content">
-            <div class="row">
-            
-                <div class="col-md-4 col-sm-4 post-page-more-btn">
-                    <span class="post-comments-btn btn btn-info btn-block" data-toggle="tooltip" data-placement="top" title="本站采用Disqus评论组件，若您没有科学上网可能会无法查看并评论">加载评论</span>
-                </div>
-            
-                <div class="col-md-4 col-sm-4 post-page-more-btn">
-                    <span  data-toggle="modal" data-target="#post-donate-content">
-                        <span id="post-donate-btn" class="btn btn-danger btn-block" data-toggle="tooltip" data-placement="top" title="如果您觉得本文还不错或者对您有帮助，可以考虑打赏一下作者哦">打赏本文</span>
-                    </span>
-                </div>
-                <div class="col-md-4 col-sm-4 post-page-more-btn">
-                    <span  data-toggle="modal" data-target="#post-qrcode-content">
-                        <span><span id="post-qrcode-btn" class="btn btn-success btn-block" data-toggle="tooltip" data-placement="top" title="微信扫描二维码手机端查看本文及分享本文">二维码</span></span>
-                    </span>
-                </div>
-            </div>
-        <div class="post-more-function-br"></div>
-
-        <div class="modal fade" id="post-donate-content" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">打赏本文</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row post-donate-content">
-                            <div class="col-md-4">
-                                <p>支付宝</p>
-                                <img class="post-donate-content-img no-lightbox" src="https://images.cnblogs.com/cnblogs_com/jevious/1659693/o_200302162654apay.jpg"/>
-                            </div>
-                            <div class="col-md-4">
-                                <p>微信</p>
-                                <img class="post-donate-content-img no-lightbox" src="https://images.cnblogs.com/cnblogs_com/jevious/1659693/o_200302162735wx.png"/>
-                            </div>
-                            <div class="col-md-4">
-                                <p>财付通</p>
-                                <img class="post-donate-content-img no-lightbox" src="https://images.cnblogs.com/cnblogs_com/jevious/1659693/o_200302162909%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200303002825.png"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="post-qrcode-content" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">文章二维码</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row post-qrcode-content">
-                            <span class="post-qrcode-content-canvas"></span>
-                            <img class="post-qrcode-content-img no-lightbox" src=""/>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <script>
-            // post QRcode
-            // 中文转码
-            function toUtf8(str) {
-                var out, i, len, c;
-                out = "";
-                len = str.length;
-                for (i = 0; i < len; i++) {
-                    c = str.charCodeAt(i);
-                    if ((c >= 0x0001) && (c <= 0x007F)) {
-                        out += str.charAt(i);
-                    } else if (c > 0x07FF) {
-                        out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
-                        out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
-                        out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
-                    } else {
-                        out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
-                        out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
-                    }
-                }
-                return out;
-            }
-            // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("http://yoursite.com/2020/03/04/304/")}).hide();
-            var canvas=qrcode.find('canvas').get(0);
-            $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
-        </script>
-
-        
-    </article>
-    
-</div>
-
-                
-            <footer class="blog-footer">
-                <p class="blog-footer-left">Copyright ©  2020 <a href="http://yoursite.com">小苹果大橘子</a></p>
-                <p class="blog-footer-right">Powered by <a href="https://hexo.io" target="_blank">Hexo</a>,Theme <a href="https://note.isweic.com/themes-life/" target="_blank">Life</a></p>
-            </footer>
-        </div><!--博客主栏结束-->
-        <!--博客侧边栏开始-->
-        <div class="col-xl-3 blog-sidebar">
-            <div class="blog-sidebar-title">
-                <a href="">小苹果大橘子</a>
-            </div>
-            <div class="blog-sidebar-logo">
-                <img src="https://tfs.alipayobjects.com/images/partner/TB1w2u_bH8CDuNkUuZmXXaU0XXa">
-            </div>
-            <div class="blog-sidebar-count blog-sidebar-padding">
-                <div class="blog-sidebar-count-left">
-                    <p class="blog-sidebar-count-p">2</p>
-                    <span class="blog-sidebar-count-span">文章</span>
-                </div>
-                <div class="blog-sidebar-count-right">
-                    <p class="blog-sidebar-count-p">2</p>
-                    <span class="blog-sidebar-count-span">标签</span>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
-            <div class="blog-sidebar-icon blog-sidebar-padding">
-                <ul>
-                    <li><a href="https://github.com/zhangshaohua12138" class="icon-github" target="_blank" data-toggle="tooltip" data-placement="top" title="Github"><i class="fa fa-github"></i></a></li>
-                    <li><a href="" class="icon-weibo" target="_blank" data-toggle="tooltip" data-placement="top" title="新浪微博"><i class="fa fa-weibo"></i></a></li>
-                    <li><a href="" class="icon-twitter" target="_blank" data-toggle="tooltip" data-placement="top" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                    <!--<li><a href="" class="icon-facebook" target="_blank" data-toggle="tooltip" data-placement="top" title="FaceBook"><i class="fa fa-facebook"></i></a></li>-->
-                    <li><a href="mailto:1141892805@qq.com" class="icon-email" data-toggle="tooltip" data-placement="top" title="E-Mail"><i class="fa fa-envelope"></i></a></li>
-                    <li><a href="" class="icon-rss" data-toggle="tooltip" target="_blank" data-placement="top" title="RSS"><i class="fa fa-rss"></i></a></li>
-                </ul>
-            </div>
-            <div class="blog-sidebar-categories">
-                <h4 class="blog-sidebar-h4"><i class="fa fa-folder-open"></i>&nbsp;文章分类</h4>
-                <ul class="list-group blog-sidebar-padding">
-                  
-                    
-                      <li class="list-group-item justify-content-between">
-                          <a href="/categories/PS/">PS</a>
-                          <span class="badge badge-default badge-pill">2</span>
-                      </li>
-                    
-                  
-                </ul>
-            </div>
-            <div class="blog-sidebar-tags">
-                <h4 class="blog-sidebar-h4"><i class="fa fa-tag"></i>&nbsp;标签云</h4>
-                <ul class="blog-sidebar-tags-ul blog-sidebar-padding">
-                  
-                    
-                      <li><a href="/tags/PS/" class="tag-could" data-toggle="tooltip" data-placement="top" title="PS">PS</a></li>
-                    
-                      <li><a href="/tags/PS%E5%9F%BA%E7%A1%80/" class="tag-could" data-toggle="tooltip" data-placement="top" title="PS基础">PS基础</a></li>
-                    
-                  
-                </ul>
-            </div>
-            <script>
-              // 博客侧栏标签云随机色
-              var tag_cloud = $('.tag-could');
-              tag_cloud.each(function () {
-                  var Cnum = 9;
-                  var Crand = parseInt(Math.random() * Cnum);
-                  $(this).addClass("tag-could" + Crand);
-              })
-            </script>
-            <!--返回顶部按钮-->
-            <div class="retop">
-                <i class="fa fa-angle-up"></i>
-            </div>
-        </div><!--博客侧边栏结束-->
-    </div>
-</div>
-<script src="/js/LeanStatistics.min.js"></script>
-<script src="/js/Life.js"></script>
-<script type="text/javascript">
-    hljs.initHighlightingOnLoad();
-    hljs.initLineNumbersOnLoad();
-    otherF();
-    LeanStatistics();
-    $(document).pjax('a', '#pjax-box', {fragment:'#pjax-box', timeout:8000}).on('pjax:complete', function() {
-      $('pre code').each(function(i, block){
-        hljs.highlightBlock(block);
-      })
-      $('code.hljs').each(function(i, block) {
-        hljs.lineNumbersBlock(block);
-      });
-      LeanStatistics();
-    }).on('pjax:start', function() { NProgress.start(); }).on('pjax:end',   function() {
-      NProgress.done();
-      otherF();
-    });
-</script>
-</body>
-</html>
+  if theme.reward.enable
+    include includes/reward.pug
+  include includes/pagination.pug
+  
+  if theme.related_post && theme.related_post.enable
+    != related_posts(page,site.posts)
+  if page.comments !== false
+    include includes/comments/index.pug
