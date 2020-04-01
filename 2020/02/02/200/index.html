@@ -82,19 +82,19 @@ function activateLightMode(){
 <li><h2 id="根标签"><a href="#根标签" class="headerlink" title="根标签"></a>根标签</h2><pre><code>  &lt;html&gt;&lt;/html&gt;</code></pre><p>  这个标签叫做<strong>根标签</strong>，树只能在一个根上开枝散叶，所以<strong>一个HTML文件只能有一个根标签，且所有的代码都在根标签内部</strong></p>
 </li>
 <li><h2 id="结构化标签"><a href="#结构化标签" class="headerlink" title="结构化标签"></a>结构化标签</h2><pre><code>&lt;head&gt;&lt;/head&gt;
-&lt;body&gt;&lt;/body&gt;</code></pre></li>
+&lt;body&gt;&lt;/body&gt;</code></pre><p>结构化标签在HTML文件中必须要有，当把HTML文件看成一个人</p>
+<p>head就相当于人的思想-外人是看不到的-标签内容服务于浏览器</p>
+<p>body就相当于人的身体-外人是能看到的-标签内容服务于浏览者</p>
+<p>所以，关于浏览器的配置信息要写在head标签里，而需要用户浏览的内容则写在body标签里</p>
+</li>
 </ul>
-<p>​    结构化标签在HTML文件中必须要有，当把HTML文件看成一个人</p>
-<p>​    head就相当于人的思想-外人是看不到的-标签内容服务于浏览器</p>
-<p>​    body就相当于人的身体-外人是能看到的-标签内容服务于浏览者</p>
-<p>​    所以，关于浏览器的配置信息要写在head标签里，而需要用户浏览的内容则写在body标签里</p>
 <p>到目前为止，就可以写一个简单的页面了</p>
 <pre><code>&lt;html&gt;
     &lt;head&gt;&lt;/head&gt;
     &lt;body&gt;
         lift is shit！
     &lt;/body&gt;
-&lt;/html&gt;</code></pre><p>执行一下，可以看到浏览器上显示了<a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401200958500-266497058.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401200958500-266497058.png" class="lazyload" title></a>也可以试着加点汉字</p>
+&lt;/html&gt;</code></pre><p>执行一下，可以看到浏览器上显示了<a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401200958500-266497058.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt title data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401200958500-266497058.png" class="lazyload"></a>也可以试着加点汉字</p>
 <pre><code>```
 &lt;html&gt;
     &lt;head&gt;&lt;/head&gt;
@@ -113,7 +113,7 @@ function activateLightMode(){
 <li><h2 id="meta标签"><a href="#meta标签" class="headerlink" title="meta标签"></a>meta标签</h2><pre><code>&lt;meta&gt;</code></pre><p>这个标签和别的标签不一样，他是自己单独出现的，但是写完还不好用，还会出现乱码</p>
 <p>所以又有新的知识点(往下看，属性)</p>
 </li>
-<li><h2 id="标题标签-title"><a href="#标题标签-title" class="headerlink" title="标题标签 title"></a>标题标签 title</h2><p>这个标签是用来做什么的呢？<a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401203308795-1755699009.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401203308795-1755699009.png" class="lazyload" title></a></p>
+<li><h2 id="标题标签-title"><a href="#标题标签-title" class="headerlink" title="标题标签 title"></a>标题标签 title</h2><p>这个标签是用来做什么的呢？<a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401203308795-1755699009.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt title data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401203308795-1755699009.png" class="lazyload"></a></p>
 <p>在看淘宝的时候的这个位置显示的字，就是title标签的功劳</p>
 <pre><code>&lt;html&gt;
     &lt;head&gt;
@@ -137,7 +137,7 @@ function activateLightMode(){
         &lt;p&gt;这是段落标签&lt;/p&gt;
         &lt;p&gt;这是段落标签&lt;/p&gt;
     &lt;/body&gt;
-&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210253729-1260322570.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210253729-1260322570.png" class="lazyload" title></a></p>
+&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210253729-1260322570.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt title data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210253729-1260322570.png" class="lazyload"></a></p>
 </li>
 <li><h2 id="标题标签-h1-h6"><a href="#标题标签-h1-h6" class="headerlink" title="标题标签 h1~h6"></a>标题标签 h1~h6</h2><pre><code>&lt;html&gt;
     &lt;head&gt;
@@ -152,7 +152,7 @@ function activateLightMode(){
         &lt;h5&gt;这是h5&lt;/h5&gt;
         &lt;h6&gt;这是h6&lt;/h6&gt;
     &lt;/body&gt;
-&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210635910-968532807.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210635910-968532807.png" class="lazyload" title></a></p>
+&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210635910-968532807.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt title data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401210635910-968532807.png" class="lazyload"></a></p>
 <p>这是一组标签,在word里面也见过类似的样式，有以下三个作用</p>
 <ul>
 <li>独成一段</li>
@@ -170,7 +170,7 @@ function activateLightMode(){
         &lt;strong&gt;加粗&lt;/strong&gt;
         &lt;em&gt;倾斜&lt;/em&gt;
     &lt;/body&gt;
-&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211036413-1757314153.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211036413-1757314153.png" class="lazyload" title></a></p>
+&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211036413-1757314153.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt title data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211036413-1757314153.png" class="lazyload"></a></p>
 <p>如果想让字又加粗又倾斜呢？</p>
 <pre><code>&lt;strong&gt;&lt;em&gt;又加粗又倾斜&lt;/em&gt;&lt;/strong&gt;</code></pre></li>
 <li><h2 id="删除标签-del"><a href="#删除标签-del" class="headerlink" title="删除标签 del"></a>删除标签 del</h2><p>现价xxx，原价xxx</p>
@@ -182,7 +182,7 @@ function activateLightMode(){
     &lt;body&gt;
         现价xxx，&lt;del&gt;原价xxx&lt;/del&gt;
     &lt;/body&gt;
-&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211607176-27913323.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211607176-27913323.png" class="lazyload" title></a></p>
+&lt;/html&gt;</code></pre><p><a href="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211607176-27913323.png" target="_blank" rel="noopener" data-fancybox="group" data-caption class="fancybox"><img alt title data-src="https://img2020.cnblogs.com/blog/1433227/202004/1433227-20200401211607176-27913323.png" class="lazyload"></a></p>
 </li>
 <li><h2 id="div-span-标签"><a href="#div-span-标签" class="headerlink" title="div/span 标签"></a>div/span 标签</h2><p>本身没有什么特别之处，但是是作为一个容器进行使用</p>
 <p>可以将<strong>页面进行分类，结构化，便于维护</strong></p>
